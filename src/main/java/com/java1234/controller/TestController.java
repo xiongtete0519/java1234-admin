@@ -8,6 +8,7 @@ import com.java1234.util.JwtUtils;
 import com.java1234.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,6 +28,8 @@ public class TestController {
     private SysUserService sysUserService;
 
     @GetMapping("/user/list")
+//    @PreAuthorize("hasRole('ROLE_admin')")
+    @PreAuthorize("hasAuthority('system:user:list')")
     public R userList(@RequestHeader(required = false) String token){
         log.info("token={}",token);
         if(StringUtil.isNotEmpty(token)){
