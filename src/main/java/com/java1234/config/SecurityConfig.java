@@ -2,7 +2,9 @@ package com.java1234.config;
 
 import com.java1234.common.security.LoginFailureHandler;
 import com.java1234.common.security.LoginSuccessHandler;
+import com.java1234.common.security.MyUserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * Spring Security配置
@@ -24,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginFailureHandler loginFailureHandler;
 
+    @Autowired
+    private MyUserDetailsServiceImpl myUserDetailsService;
+
     private static final String URL_WHITELIST[] ={
             "/login",
             "/logout",
@@ -32,9 +38,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/image/**",
             "/test/**"
     };
+
+    //密码加密配置
+    @Bean
+    BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        super.configure(auth);
+        auth.userDetailsService(myUserDetailsService);
     }
 
     @Override
