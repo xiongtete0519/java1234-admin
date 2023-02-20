@@ -1,7 +1,11 @@
 package com.java1234.service;
 
+import com.java1234.entity.SysMenu;
 import com.java1234.entity.SysUser;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,4 +17,7 @@ public interface SysUserService extends IService<SysUser> {
 
     //获取权限字符串
     String getUserAuthorityInfo(Long userId);
+
+    //生成树形菜单
+    List<SysMenu> buildTreeMenu(ArrayList<SysMenu> sysMenuList);
 }
