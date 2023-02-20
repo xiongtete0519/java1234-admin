@@ -1,5 +1,6 @@
 package com.java1234.config;
 
+import com.java1234.common.security.JwtAuthorizationFilter;
 import com.java1234.common.security.LoginFailureHandler;
 import com.java1234.common.security.LoginSuccessHandler;
 import com.java1234.common.security.MyUserDetailsServiceImpl;
@@ -35,9 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logout",
             "/captcha",
             "/password",
-            "/image/**",
-            "/test/**"
+            "/image/**"
     };
+
+    @Bean
+    JwtAuthorizationFilter jwtAuthorizationFilter() throws Exception {
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager());
+        return jwtAuthorizationFilter;
+    }
 
     //密码加密配置
     @Bean
@@ -72,10 +78,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(URL_WHITELIST).permitAll() //放行白名单
-                .anyRequest().authenticated();           //要认证的请求
+                .anyRequest().authenticated()           //要认证的请求
         //异常处理配置
 
         //自定义过滤器配置
+                .and()
+                .addFilter(jwtAuthorizationFilter());
 
     }
 }

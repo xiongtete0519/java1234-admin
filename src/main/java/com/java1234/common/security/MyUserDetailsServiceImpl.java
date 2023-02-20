@@ -34,7 +34,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
         return new User(sysUser.getUsername(),sysUser.getPassword(),getUserAuthority());
     }
 
-    private List<GrantedAuthority> getUserAuthority() {
+    public List<GrantedAuthority> getUserAuthority() {
         return new ArrayList<>();
     }
 }
