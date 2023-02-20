@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * jwt认证过滤器
+ */
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Autowired

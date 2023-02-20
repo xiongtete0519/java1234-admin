@@ -1,9 +1,6 @@
 package com.java1234.config;
 
-import com.java1234.common.security.JwtAuthorizationFilter;
-import com.java1234.common.security.LoginFailureHandler;
-import com.java1234.common.security.LoginSuccessHandler;
-import com.java1234.common.security.MyUserDetailsServiceImpl;
+import com.java1234.common.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsServiceImpl myUserDetailsService;
+
+    @Autowired
+    private JwtAuthorizationEntryPoint jwtAuthorizationEntryPoint;
 
     private static final String URL_WHITELIST[] ={
             "/login",
@@ -80,7 +80,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(URL_WHITELIST).permitAll() //放行白名单
                 .anyRequest().authenticated()           //要认证的请求
         //异常处理配置
-
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthorizationEntryPoint)
         //自定义过滤器配置
                 .and()
                 .addFilter(jwtAuthorizationFilter());
