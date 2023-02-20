@@ -31,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthorizationEntryPoint jwtAuthorizationEntryPoint;
 
+    @Autowired
+    private JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
+
     private static final String URL_WHITELIST[] ={
             "/login",
             "/logout",
@@ -68,8 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .successHandler(loginSuccessHandler)    //登录成功处理器
                 .failureHandler(loginFailureHandler)    //登录失败处理器
-//                .and()
-//                .logout().logoutSuccessHandler()
+                .and()
+                .logout().logoutSuccessHandler(jwtLogoutSuccessHandler)//登出处理器
         //session禁用配置
                 .and()
                 .sessionManagement()

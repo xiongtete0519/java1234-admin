@@ -8,6 +8,7 @@ import com.java1234.util.JwtUtils;
 import com.java1234.util.StringUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,7 @@ import java.util.Arrays;
 /**
  * jwt认证过滤器
  */
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Autowired
@@ -47,7 +49,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = request.getHeader("token");
-        System.out.println("请求url:"+request.getRequestURI());
+        log.info("请求url:"+request.getRequestURI());
         //如果token是空或者url在白名单里，则放行
         if(StringUtil.isEmpty(token)|| new ArrayList<String>(Arrays.asList(URL_WHITELIST)).contains(request.getRequestURI())){
             chain.doFilter(request,response);
