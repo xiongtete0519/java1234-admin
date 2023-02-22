@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -48,7 +45,8 @@ public class SysUserController {
     @PreAuthorize("hasAnyAuthority('system:user:edit','system:user:add')")
     public R save(@RequestBody SysUser sysUser){
         if(sysUser.getId()==null||sysUser.getId()==-1){
-
+            sysUser.setPassword(bCryptPasswordEncoder.encode(sysUser.getPassword()));
+            sysUserService.save(sysUser);
         }else{
             sysUserService.updateById(sysUser);
         }
@@ -130,5 +128,26 @@ public class SysUserController {
         resultMap.put("userList",userList);
         resultMap.put("total",total);
         return R.ok(resultMap);
+    }
+
+    //根据id查询
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('system:user:query')")
+    public R findById(@PathVariable(value = "id")Integer id){
+        SysUser sysUser = sysUserService.getById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("sysUser",sysUser);
+        return R.ok(map);
+    }
+
+    //验证用户名
+    @PostMapping("/checkUserName")
+    @PreAuthorize("hasAuthority('system:user:query')")
+    public R checkUserName(@RequestBody SysUser sysUser){
+        if(sysUserService.getByUsername(sysUser.getUsername())==null){
+            return R.ok();
+        }else{
+            return R.error();
+        }
     }
 }
