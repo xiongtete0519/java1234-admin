@@ -2,6 +2,7 @@ package com.java1234.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.java1234.common.constant.Constant;
 import com.java1234.entity.*;
 import com.java1234.service.SysRoleService;
 import com.java1234.service.SysUserRoleService;
@@ -158,6 +159,26 @@ public class SysUserController {
     public R delete(@RequestBody Long[] ids){
         sysUserService.removeByIds(Arrays.asList(ids));
         sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in("user_id",ids));
+        return R.ok();
+    }
+
+    //重置密码
+    @GetMapping("/resetPassword/{id}")
+    @PreAuthorize("hasAuthority('system:user:edit')")
+    public R resetPassword(@PathVariable(value = "id")Integer id){
+        SysUser sysUser = sysUserService.getById(id);
+        sysUser.setPassword(bCryptPasswordEncoder.encode(Constant.DEFAULT_PASSWORD));
+        sysUserService.updateById(sysUser);
+        return R.ok();
+    }
+
+    //更新status状态
+    @GetMapping("/updateStatus/{id}/status/{status}")
+    @PreAuthorize("hasAuthority('system:user:edit')")
+    public R updateStatus(@PathVariable(value = "id")Integer id,@PathVariable(value = "status")String status){
+        SysUser sysUser = sysUserService.getById(id);
+        sysUser.setStatus(status);
+        sysUserService.saveOrUpdate(sysUser);
         return R.ok();
     }
 }
