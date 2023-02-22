@@ -2,18 +2,18 @@ package com.java1234.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.java1234.entity.PageBean;
-import com.java1234.entity.R;
-import com.java1234.entity.SysRole;
-import com.java1234.entity.SysUser;
+import com.java1234.entity.*;
 import com.java1234.service.SysRoleService;
+import com.java1234.service.SysUserRoleService;
 import com.java1234.service.SysUserService;
 import com.java1234.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +23,7 @@ import java.util.Map;
 public class SysRoleController {
 
     @Autowired
-    private SysUserService sysUserService;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private SysUserRoleService sysUserRoleService;
 
     @Autowired
     private SysRoleService sysRoleService;
@@ -74,4 +71,15 @@ public class SysRoleController {
         map.put("sysRole",sysRole);
         return R.ok(map);
     }
+
+    //删除
+    @Transactional
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('system:role:delete')")
+    public R delete(@RequestBody Long[] ids){
+        sysRoleService.removeByIds(Arrays.asList(ids));
+        sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in("role_id",ids));
+        return R.ok();
+    }
+
 }
