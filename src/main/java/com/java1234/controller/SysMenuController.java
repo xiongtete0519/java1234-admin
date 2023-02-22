@@ -51,4 +51,17 @@ public class SysMenuController {
         map.put("sysMenu",sysMenu);
         return R.ok(map);
     }
+
+    //删除菜单
+    @GetMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('system:menu:delete')")
+    public R delete(@PathVariable(value = "id")Long id){
+        //是否有父节点
+        int count = sysMenuService.count(new QueryWrapper<SysMenu>().eq("parent_id", id));
+        if(count>0){
+            return R.error("请先删除子菜单！");
+        }
+        sysMenuService.removeById(id);
+        return R.ok();
+    }
 }
