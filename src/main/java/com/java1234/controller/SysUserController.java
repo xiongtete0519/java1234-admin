@@ -181,4 +181,23 @@ public class SysUserController {
         sysUserService.saveOrUpdate(sysUser);
         return R.ok();
     }
+
+    //用户角色授权
+    @Transactional
+    @PostMapping("/grantRole/{userId}")
+    @PreAuthorize("hasAuthority('system:user:role')")
+    public R grantRole(@PathVariable("userId") Long userId,@RequestBody Long[] roleIds){
+        List<SysUserRole> userRoleList=new ArrayList<>();
+        Arrays.stream(roleIds).forEach(r -> {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleId(r);//设置role_id
+            sysUserRole.setUserId(userId);//设置user_id
+            userRoleList.add(sysUserRole);
+        });
+        //清空用户目前的角色
+        sysUserRoleService.remove(new QueryWrapper<SysUserRole>().eq("user_id",userId));
+        //新的user_role
+        sysUserRoleService.saveBatch(userRoleList);
+        return R.ok();
+    }
 }

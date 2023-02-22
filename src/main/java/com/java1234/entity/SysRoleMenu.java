@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @TableName(value ="sys_role_menu")
 @Data
-public class SysRoleMenu extends BaseEntity implements Serializable {
+public class SysRoleMenu implements Serializable {
 
     /**
      * 角色ID
