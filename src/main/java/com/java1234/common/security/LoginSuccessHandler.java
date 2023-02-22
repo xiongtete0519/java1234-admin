@@ -68,6 +68,9 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             );
             menuSet.addAll(sysMenuList);
         }
+        //以逗号隔开的角色字符串
+        currentUser.setRoles(roleList.stream().map(SysRole::getName).collect(Collectors.joining(",")));
+
         ArrayList<SysMenu> sysMenuList = new ArrayList<>(menuSet);
 
         //排序

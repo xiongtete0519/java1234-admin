@@ -58,5 +58,11 @@ public class SysUser extends BaseEntity implements Serializable {
     @TableField(value = "status")
     private String status;
 
+    /**
+     * 所属角色：多个角色逗号隔开
+     */
+    @TableField(exist = false)
+    private String roles;
+
 
 }
