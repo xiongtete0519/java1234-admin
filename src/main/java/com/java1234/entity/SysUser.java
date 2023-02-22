@@ -64,5 +64,17 @@ public class SysUser extends BaseEntity implements Serializable {
     @TableField(exist = false)
     private String roles;
 
+    /**
+     * 旧密码
+     */
+    @TableField(exist = false)
+    private String oldPassword;
+
+    /**
+     * 确认新密码
+     */
+    @TableField(exist = false)
+    private String newPassword;
+
 
 }
