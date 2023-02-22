@@ -77,7 +77,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         sysMenuList.sort(Comparator.comparing(SysMenu::getOrderNum));
 
         //生成树形菜单
-        List<SysMenu> menuList = sysUserService.buildTreeMenu(sysMenuList);
+        List<SysMenu> menuList = sysMenuService.buildTreeMenu(sysMenuList);
 
 
 

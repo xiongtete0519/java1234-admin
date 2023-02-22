@@ -18,6 +18,4 @@ public interface SysUserService extends IService<SysUser> {
     //获取权限字符串
     String getUserAuthorityInfo(Long userId);
 
-    //生成树形菜单
-    List<SysMenu> buildTreeMenu(ArrayList<SysMenu> sysMenuList);
 }
