@@ -33,3 +33,5 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
 
+
+avatarImagesFilePath: F://vscode_test/java1234-admin-front/src/userAvatar/
