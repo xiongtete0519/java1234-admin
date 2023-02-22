@@ -3,6 +3,7 @@ package com.java1234.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.java1234.entity.*;
+import com.java1234.service.SysRoleMenuService;
 import com.java1234.service.SysRoleService;
 import com.java1234.service.SysUserRoleService;
 import com.java1234.service.SysUserService;
@@ -13,10 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/sys/role")
@@ -27,6 +26,9 @@ public class SysRoleController {
 
     @Autowired
     private SysRoleService sysRoleService;
+
+    @Autowired
+    private SysRoleMenuService sysRoleMenuService;
 
     //查询所有角色
     @GetMapping("/listAll")
@@ -79,6 +81,33 @@ public class SysRoleController {
     public R delete(@RequestBody Long[] ids){
         sysRoleService.removeByIds(Arrays.asList(ids));
         sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in("role_id",ids));
+        return R.ok();
+    }
+
+    //获取当前角色的权限菜单id集合
+    @GetMapping("/menus/{id}")
+    @PreAuthorize("hasAuthority('system:role:menu')")
+    public R menus(@PathVariable(value ="id")Integer id){
+        List<SysRoleMenu> roleMenuList = sysRoleMenuService.list(new QueryWrapper<SysRoleMenu>().eq("role_id", id));
+        List<Long> menuIdList = roleMenuList.stream().map(SysRoleMenu::getMenuId).collect(Collectors.toList());
+        return R.ok().put("menuIdList",menuIdList);
+    }
+
+    //更新角色权限信息
+    @Transactional
+    @PostMapping("/updateMenus/{id}")
+    @PreAuthorize("hasAuthority('system:role:menu')")
+    public R updateMenus(@PathVariable(value ="id")Long id, @RequestBody Long[] menuIds){
+        //先根据role_id删除role_menu中的信息
+        sysRoleMenuService.remove(new QueryWrapper<SysRoleMenu>().eq("role_id",id));
+        ArrayList<SysRoleMenu> sysRoleMenuList = new ArrayList<>();
+        Arrays.stream(menuIds).forEach(menuId->{
+            SysRoleMenu roleMenu = new SysRoleMenu();
+            roleMenu.setRoleId(id);
+            roleMenu.setMenuId(menuId);
+            sysRoleMenuList.add(roleMenu);
+        });
+        sysRoleMenuService.saveBatch(sysRoleMenuList);
         return R.ok();
     }
 
