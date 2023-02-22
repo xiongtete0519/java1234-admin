@@ -2,11 +2,9 @@ package com.java1234.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.java1234.entity.PageBean;
-import com.java1234.entity.R;
-import com.java1234.entity.SysRole;
-import com.java1234.entity.SysUser;
+import com.java1234.entity.*;
 import com.java1234.service.SysRoleService;
+import com.java1234.service.SysUserRoleService;
 import com.java1234.service.SysUserService;
 import com.java1234.util.DateUtil;
 import com.java1234.util.StringUtil;
@@ -15,14 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @RestController
@@ -36,7 +32,11 @@ public class SysUserController {
     private SysRoleService sysRoleService;
 
     @Autowired
+    private SysUserRoleService sysUserRoleService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Value("${avatarImagesFilePath}")
     private String avatarImagesFilePath;
 
@@ -149,5 +149,15 @@ public class SysUserController {
         }else{
             return R.error();
         }
+    }
+
+    //删除
+    @Transactional
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('system:user:delete')")
+    public R delete(@RequestBody Long[] ids){
+        sysUserService.removeByIds(Arrays.asList(ids));
+        sysUserRoleService.remove(new QueryWrapper<SysUserRole>().in("user_id",ids));
+        return R.ok();
     }
 }
