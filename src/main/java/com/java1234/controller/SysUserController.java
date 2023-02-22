@@ -1,5 +1,7 @@
 package com.java1234.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.java1234.entity.PageBean;
 import com.java1234.entity.R;
 import com.java1234.entity.SysUser;
 import com.java1234.service.SysUserService;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -94,5 +97,20 @@ public class SysUserController {
         currentUser.setAvatar(sysUser.getAvatar());
         sysUserService.updateById(currentUser);
         return R.ok();
+    }
+
+    //条件分页查询用户信息
+    @PostMapping("/list")
+    @PreAuthorize("hasAuthority('system:user:query')")
+    public R list(@RequestBody PageBean pageBean){
+        //传入当前页和每页记录数
+        Page<SysUser> pageModel = new Page<>(pageBean.getPageNum(), pageBean.getPageSize());
+        Page<SysUser> pageResult = sysUserService.page(pageModel);
+        List<SysUser> userList = pageResult.getRecords();
+        long total = pageResult.getTotal();
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("userList",userList);
+        resultMap.put("total",total);
+        return R.ok(resultMap);
     }
 }
