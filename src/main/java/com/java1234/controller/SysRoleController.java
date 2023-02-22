@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.java1234.entity.PageBean;
 import com.java1234.entity.R;
 import com.java1234.entity.SysRole;
+import com.java1234.entity.SysUser;
 import com.java1234.service.SysRoleService;
+import com.java1234.service.SysUserService;
 import com.java1234.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -18,6 +21,12 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController {
+
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private SysRoleService sysRoleService;
@@ -43,5 +52,26 @@ public class SysRoleController {
         resultMap.put("roleList",userList);
         resultMap.put("total",pageResult.getTotal());
         return R.ok(resultMap);
+    }
+
+    //添加或者修改
+    @PostMapping("/save")
+    @PreAuthorize("hasAuthority('system:role:add')"+"||"+"hasAuthority('system:role:edit')")    public R save(@RequestBody SysRole sysRole){
+        if(sysRole.getId()==null || sysRole.getId()==-1){   //添加
+            sysRoleService.save(sysRole);
+        }else{  //修改
+            sysRoleService.updateById(sysRole);
+        }
+        return R.ok();
+    }
+
+    //根据id查询
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('system:role:query')")
+    public R findById(@PathVariable(value = "id")Integer id){
+        SysRole sysRole = sysRoleService.getById(id);
+        Map<String,Object> map=new HashMap<>();
+        map.put("sysRole",sysRole);
+        return R.ok(map);
     }
 }
