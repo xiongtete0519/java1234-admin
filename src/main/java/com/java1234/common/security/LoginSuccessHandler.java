@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -51,11 +52,15 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         SysUser currentUser = sysUserService.getByUsername(username);
 
+        StringBuffer permsStr = new StringBuffer();
+
         //根据用户id获取所有的角色信息
         List<SysRole> roleList = sysRoleService.list(
                 new QueryWrapper<SysRole>()
                         .inSql("id", "select role_id from sys_user_role where user_id=" + currentUser.getId())
         );
+        //以逗号隔开的角色字符串
+        currentUser.setRoles(roleList.stream().map(SysRole::getName).collect(Collectors.joining(",")));
 
         //遍历所有的角色，获取所有菜单权限，而且不重复
         Set<SysMenu> menuSet=new HashSet<>();
@@ -66,10 +71,13 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
                             .inSql("id", "select menu_id from sys_role_menu where role_id=" + sysRole.getId())
 
             );
-            menuSet.addAll(sysMenuList);
+            for (SysMenu sysMenu : sysMenuList) {
+                menuSet.add(sysMenu);
+                permsStr.append(sysMenu.getPerms()).append(",");
+            }
         }
-        //以逗号隔开的角色字符串
-        currentUser.setRoles(roleList.stream().map(SysRole::getName).collect(Collectors.joining(",")));
+
+        String[] perms = StringUtils.tokenizeToStringArray(permsStr.toString(),",");
 
         ArrayList<SysMenu> sysMenuList = new ArrayList<>(menuSet);
 
@@ -81,7 +89,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
 
-        outputStream.write(JSONUtil.toJsonStr(R.ok("登录成功").put("authorization",token).put("currentUser",currentUser).put("menuList",menuList)).getBytes());
+        outputStream.write(JSONUtil.toJsonStr(R.ok("登录成功")
+                        .put("authorization",token)
+                        .put("currentUser",currentUser)
+                        .put("menuList",menuList).put("perms",perms)).getBytes());
         outputStream.flush();
         outputStream.close();
     }
