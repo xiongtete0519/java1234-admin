@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Spring Security配置
@@ -33,6 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
+
+    @Autowired
+    private CaptchaFilter captchaFilter;
 
     private static final String URL_WHITELIST[] ={
             "/login",
@@ -88,7 +92,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(jwtAuthorizationEntryPoint)
         //自定义过滤器配置
                 .and()
-                .addFilter(jwtAuthorizationFilter());
+                .addFilter(jwtAuthorizationFilter())
+                .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }
