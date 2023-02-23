@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class SysUserController {
     //更新个人信息
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('system:user:edit','system:user:add')")
-    public R save(@RequestBody SysUser sysUser){
+    public R save(@RequestBody @Valid SysUser sysUser){
         if(sysUser.getId()==null||sysUser.getId()==-1){
             sysUser.setPassword(bCryptPasswordEncoder.encode(sysUser.getPassword()));
             sysUserService.save(sysUser);

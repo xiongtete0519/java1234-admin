@@ -10,6 +10,9 @@ import java.util.List;
 
 import lombok.Data;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 /**
  * 
  * @TableName sys_user
@@ -22,12 +25,14 @@ public class SysUser extends BaseEntity implements Serializable {
      * 用户名
      */
     @TableField(value = "username")
+    @NotBlank(message ="用户名不能为空!")
     private String username;
 
     /**
      * 密码
      */
     @TableField(value = "password")
+    @NotBlank(message ="密码不能为空!")
     private String password;
 
     /**
@@ -40,12 +45,15 @@ public class SysUser extends BaseEntity implements Serializable {
      * 用户邮箱
      */
     @TableField(value = "email")
+    @NotBlank(message ="邮箱不能为空!")
+    @Email(message = "邮箱格式不正确")
     private String email;
 
     /**
      * 手机号码
      */
     @TableField(value = "phonenumber")
+    @NotBlank(message ="手机号码不能为空!")
     private String phonenumber;
 
     /**
