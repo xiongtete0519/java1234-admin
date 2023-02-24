@@ -1,9 +1,7 @@
 package com.java1234.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +89,13 @@ public class SysUser extends BaseEntity implements Serializable {
      */
     @TableField(exist = false)
     private List<SysRole> sysRoleList;
+
+    /**
+     * 删除标记（0:可用 1:已删除）
+     */
+    @TableLogic  //逻辑删除 默认效果 0 没有删除 1 已经删除
+    @TableField("is_deleted")
+    private Integer isDeleted;
 
 
 }
