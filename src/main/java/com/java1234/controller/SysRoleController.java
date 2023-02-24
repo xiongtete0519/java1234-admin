@@ -8,6 +8,7 @@ import com.java1234.service.SysRoleService;
 import com.java1234.service.SysUserRoleService;
 import com.java1234.service.SysUserService;
 import com.java1234.util.StringUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Api(tags = "角色管理")
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController {

@@ -4,6 +4,7 @@ import com.google.code.kaptcha.Producer;
 import com.java1234.common.constant.Constant;
 import com.java1234.entity.R;
 import com.java1234.util.RedisUtil;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,9 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * 验证码Controller控制器
- */
+@Api(tags = "验证码Controller控制器")
 @RestController
 public class CaptchaController {
 

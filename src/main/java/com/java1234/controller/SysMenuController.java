@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.java1234.entity.R;
 import com.java1234.entity.SysMenu;
 import com.java1234.service.SysMenuService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 系统菜单控制器
- */
+
+@Api(tags = "菜单管理")
 @RestController
 @RequestMapping("/sys/menu")
 public class SysMenuController {
