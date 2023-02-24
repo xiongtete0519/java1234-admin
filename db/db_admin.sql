@@ -11,7 +11,7 @@
  Target Server Version : 80012
  File Encoding         : 65001
 
- Date: 23/02/2023 13:08:34
+ Date: 24/02/2023 18:58:58
 */
 
 SET NAMES utf8mb4;
@@ -75,25 +75,26 @@ CREATE TABLE `sys_role`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `is_deleted` int(10) NULL DEFAULT 0 COMMENT '逻辑删除标志',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', '2022-07-04 14:40:44', '2022-07-04 14:40:47', '拥有系统最高权限');
-INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', '2022-07-04 14:41:56', '2022-07-04 14:41:58', '普通角色');
-INSERT INTO `sys_role` VALUES (3, '测试角色', 'test', '2022-07-04 14:42:24', '2022-07-04 14:42:27', '测试角色');
-INSERT INTO `sys_role` VALUES (4, '2', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (5, '3', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (6, '4', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (7, '5', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (14, '6', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (16, '8', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (17, '0', NULL, NULL, NULL, NULL);
-INSERT INTO `sys_role` VALUES (19, '测2', 'cc2', '2022-08-13 21:06:21', '2022-08-13 13:06:27', 'eewew2');
-INSERT INTO `sys_role` VALUES (20, 'ccc测试', 'test2', '2022-08-29 17:10:33', NULL, 'xxx');
-INSERT INTO `sys_role` VALUES (21, '今天测试角色', 'todytest', '2022-08-29 22:01:11', NULL, 'ccc');
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', '2022-07-04 14:40:44', '2022-07-04 14:40:47', '拥有系统最高权限', 0);
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', '2022-07-04 14:41:56', '2022-07-04 14:41:58', '普通角色', 0);
+INSERT INTO `sys_role` VALUES (3, '测试角色', 'test', '2022-07-04 14:42:24', '2022-07-04 14:42:27', '测试角色', 0);
+INSERT INTO `sys_role` VALUES (4, '2', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (5, '3', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (6, '4', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (7, '5', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (14, '6', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (16, '8', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (17, '0', NULL, NULL, NULL, NULL, 0);
+INSERT INTO `sys_role` VALUES (19, '测2', 'cc2', '2022-08-13 21:06:21', '2022-08-13 13:06:27', 'eewew2', 0);
+INSERT INTO `sys_role` VALUES (20, 'ccc测试', 'test2', '2022-08-29 17:10:33', NULL, 'xxx', 0);
+INSERT INTO `sys_role` VALUES (21, '今天测试角色', 'todytest', '2022-08-29 22:01:11', NULL, 'ccc', 0);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -104,7 +105,7 @@ CREATE TABLE `sys_role_menu`  (
   `role_id` bigint(20) NULL DEFAULT NULL COMMENT '角色ID',
   `menu_id` bigint(20) NULL DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 251 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 266 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_role_menu
@@ -116,9 +117,6 @@ INSERT INTO `sys_role_menu` VALUES (11, 2, 4);
 INSERT INTO `sys_role_menu` VALUES (12, 2, 5);
 INSERT INTO `sys_role_menu` VALUES (13, 2, 6);
 INSERT INTO `sys_role_menu` VALUES (14, 2, 7);
-INSERT INTO `sys_role_menu` VALUES (15, 3, 2);
-INSERT INTO `sys_role_menu` VALUES (16, 3, 6);
-INSERT INTO `sys_role_menu` VALUES (17, 3, 7);
 INSERT INTO `sys_role_menu` VALUES (21, 7, 1);
 INSERT INTO `sys_role_menu` VALUES (22, 7, 2);
 INSERT INTO `sys_role_menu` VALUES (23, 7, 6);
@@ -186,6 +184,14 @@ INSERT INTO `sys_role_menu` VALUES (247, 4, 5);
 INSERT INTO `sys_role_menu` VALUES (248, 4, 22);
 INSERT INTO `sys_role_menu` VALUES (249, 4, 2);
 INSERT INTO `sys_role_menu` VALUES (250, 4, 6);
+INSERT INTO `sys_role_menu` VALUES (258, 3, 1);
+INSERT INTO `sys_role_menu` VALUES (259, 3, 3);
+INSERT INTO `sys_role_menu` VALUES (260, 3, 20);
+INSERT INTO `sys_role_menu` VALUES (261, 3, 8);
+INSERT INTO `sys_role_menu` VALUES (262, 3, 9);
+INSERT INTO `sys_role_menu` VALUES (263, 3, 2);
+INSERT INTO `sys_role_menu` VALUES (264, 3, 6);
+INSERT INTO `sys_role_menu` VALUES (265, 3, 7);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -203,24 +209,26 @@ CREATE TABLE `sys_user`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `is_deleted` int(10) NULL DEFAULT 0 COMMENT '逻辑删除标志',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$GcE./7jpe.K85XpMnaL/RuwiLcX.KzuMEb2p7vbnG24MBV9QUXCMu', '20230222033129000000874.jpg', 'caofeng@126.com', '18862857417', '2022-08-29 22:10:52', '0', '2022-06-09 08:47:52', '2023-02-22 15:34:25', '备注');
-INSERT INTO `sys_user` VALUES (2, 'common', '$2a$10$tiArwm0GxChyEP5k0JGzsOuzyY15IKA.ZTl8S2aj3haYlKAfpwfl.', '222.jpg', '', '', '2022-08-22 21:34:39', '0', NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (3, 'test', '$2a$10$tiArwm0GxChyEP5k0JGzsOuzyY15IKA.ZTl8S2aj3haYlKAfpwfl.', '333.jpg', '', '', '2022-07-24 17:36:07', '0', NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (4, '1', '$2a$10$lD0Fx7oMsFFmX9hVkmYy7eJteH8pBaXXro1X9DEMP5sbM.Z6Co55m', 'default.jpg', '', '', NULL, '0', NULL, '2023-02-22 20:02:09', NULL);
-INSERT INTO `sys_user` VALUES (5, '2', NULL, 'default.jpg', '', '', NULL, '1', NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (15, 'fdsfs', '$2a$10$AQVcp4hQ7REc5o7ztVnI7eX.sJdcYy3d1x2jm5CfrcCoMZMPacfpi', 'default.jpg', 'fdfa4@qq.com', '18862851414', '2022-08-02 02:22:45', '1', '2022-08-02 02:21:24', '2022-08-01 18:23:16', 'fdfds4');
-INSERT INTO `sys_user` VALUES (28, 'sdfss2', '$2a$10$7aNJxwVmefI0XAk64vrzYuOqeeImYJUQnoBrtKP9pLTGTWO2CXQ/y', 'default.jpg', 'dfds3@qq.com', '18862857413', NULL, '1', '2022-08-07 00:42:46', '2022-08-06 16:43:04', 'ddd33');
-INSERT INTO `sys_user` VALUES (29, 'ccc', '$2a$10$7cbWeVwDWO9Hh3qbJrvTHOn0E/DLYXxnIZpxZei0jY4ChfQbJuhi.', '20220829080150000000341.jpg', '3242@qq.com', '18862584120', '2022-08-29 19:52:27', '0', '2022-08-29 17:04:58', NULL, 'xxx');
-INSERT INTO `sys_user` VALUES (30, 'ccc666', '$2a$10$Tmw5VCM/K2vb837AZDYHQOqE3gPiRZKevxLsh/ozndpTSjdwABqaK', '20220829100454000000771.jpg', 'fdafds@qq.com', '18865259845', '2022-08-29 22:05:18', '0', '2022-08-29 22:00:39', NULL, 'ccc');
-INSERT INTO `sys_user` VALUES (32, '22', NULL, 'default.jpg', '', '', NULL, '0', NULL, NULL, NULL);
-INSERT INTO `sys_user` VALUES (36, 'common2', '$2a$10$c6VmFJ/LNRTma/KVLzq4ieKDTJ7I35vCbHefWBTvNG8N3vWRurhUG', 'default.jpg', '11122@qq.com', '15877409502', NULL, '0', '2023-02-23 11:17:04', '2023-02-22 19:57:44', 'xxx');
-INSERT INTO `sys_user` VALUES (37, '111111', '$2a$10$AEPhMheCxV78XAg1TqnCCOCC2G/QmxneeFYvyEoAwgomiZpRzv4zu', 'default.jpg', '22@qq.com', '13060345675', NULL, '0', '2023-02-22 19:49:32', '2023-02-22 19:49:32', 'sdsd');
+INSERT INTO `sys_user` VALUES (1, 'admin', '$2a$10$GcE./7jpe.K85XpMnaL/RuwiLcX.KzuMEb2p7vbnG24MBV9QUXCMu', '20230222033129000000874.jpg', 'caofeng@126.com', '18862857417', '2022-08-29 22:10:52', '0', '2022-06-09 08:47:52', '2023-02-22 15:34:25', '备注', 0);
+INSERT INTO `sys_user` VALUES (2, 'common', '$2a$10$tiArwm0GxChyEP5k0JGzsOuzyY15IKA.ZTl8S2aj3haYlKAfpwfl.', '222.jpg', '', '', '2022-08-22 21:34:39', '0', NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (3, 'test', '$2a$10$tiArwm0GxChyEP5k0JGzsOuzyY15IKA.ZTl8S2aj3haYlKAfpwfl.', '333.jpg', '', '', '2022-07-24 17:36:07', '0', NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (4, '1', '$2a$10$lD0Fx7oMsFFmX9hVkmYy7eJteH8pBaXXro1X9DEMP5sbM.Z6Co55m', 'default.jpg', '', '', NULL, '0', NULL, '2023-02-22 20:02:09', NULL, 0);
+INSERT INTO `sys_user` VALUES (5, '2', NULL, 'default.jpg', '', '', NULL, '1', NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (15, 'fdsfs', '$2a$10$AQVcp4hQ7REc5o7ztVnI7eX.sJdcYy3d1x2jm5CfrcCoMZMPacfpi', 'default.jpg', 'fdfa4@qq.com', '18862851414', '2022-08-02 02:22:45', '1', '2022-08-02 02:21:24', '2022-08-01 18:23:16', 'fdfds4', 0);
+INSERT INTO `sys_user` VALUES (28, 'sdfss2', '$2a$10$7aNJxwVmefI0XAk64vrzYuOqeeImYJUQnoBrtKP9pLTGTWO2CXQ/y', 'default.jpg', 'dfds3@qq.com', '18862857413', NULL, '1', '2022-08-07 00:42:46', '2022-08-06 16:43:04', 'ddd33', 0);
+INSERT INTO `sys_user` VALUES (29, 'ccc', '$2a$10$7cbWeVwDWO9Hh3qbJrvTHOn0E/DLYXxnIZpxZei0jY4ChfQbJuhi.', '20220829080150000000341.jpg', '3242@qq.com', '18862584120', '2022-08-29 19:52:27', '0', '2022-08-29 17:04:58', NULL, 'xxx', 0);
+INSERT INTO `sys_user` VALUES (30, 'ccc666', '$2a$10$Tmw5VCM/K2vb837AZDYHQOqE3gPiRZKevxLsh/ozndpTSjdwABqaK', '20220829100454000000771.jpg', 'fdafds@qq.com', '18865259845', '2022-08-29 22:05:18', '0', '2022-08-29 22:00:39', NULL, 'ccc', 0);
+INSERT INTO `sys_user` VALUES (32, '22', NULL, 'default.jpg', '', '', NULL, '0', NULL, NULL, NULL, 0);
+INSERT INTO `sys_user` VALUES (36, 'common2', '$2a$10$c6VmFJ/LNRTma/KVLzq4ieKDTJ7I35vCbHefWBTvNG8N3vWRurhUG', 'default.jpg', '11122@qq.com', '15877409502', NULL, '0', '2023-02-23 11:17:04', '2023-02-22 19:57:44', 'xxx', 0);
+INSERT INTO `sys_user` VALUES (37, '111111', '$2a$10$AEPhMheCxV78XAg1TqnCCOCC2G/QmxneeFYvyEoAwgomiZpRzv4zu', 'default.jpg', '22@qq.com', '13060345675', NULL, '0', '2023-02-22 19:49:32', '2023-02-22 19:49:32', 'sdsd', 0);
+INSERT INTO `sys_user` VALUES (38, '34234', '$2a$10$Hi8TMD6P8NYtNVpewlDPKOJ5kUX4r5fY4DkjtFsIxa/n7d9/1fnja', 'default.jpg', '232@qq.com', '13064576543', NULL, '0', '2023-02-24 14:33:24', '2023-02-24 14:33:24', 'ads', 1);
 
 -- ----------------------------
 -- Table structure for sys_user_role
