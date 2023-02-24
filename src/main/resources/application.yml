@@ -33,5 +33,10 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
 
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 开启生产环境屏蔽  true=屏蔽
+  production: false
 
 avatarImagesFilePath: F://vscode_test/java1234-admin-front/src/userAvatar/
